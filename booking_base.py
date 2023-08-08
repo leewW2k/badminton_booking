@@ -1,4 +1,5 @@
 import os
+import time
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -20,7 +21,7 @@ class BookingBase:
 
         self.start_url = os.environ["URL"]
         self.court = os.environ["COURT"]
-        self.court = str(self.court)
+        self.court = "0" + str(self.court)
         self.date = os.environ["DATE"]
         timing = os.environ["TIMING"]
         index = int(timing)
@@ -61,6 +62,10 @@ class BookingBase:
         ).click()
 
     def select_facilities(self):
+        current_time = time.localtime()
+        time_until_midnight = (24 - current_time.tm_hour) * 3600 - current_time.tm_min * 60 - current_time.tm_sec
+        # Wait until midnight
+        time.sleep(time_until_midnight)
         xpath_badminton_facility = "//input[@type='radio' and @name='p_info' and @value='1BB26']"
         self.wait.until(
             EC.element_to_be_clickable(
