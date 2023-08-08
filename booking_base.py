@@ -31,6 +31,7 @@ class BookingBase:
 
         self.username = os.environ["USERNAMENTU"]
         self.password = os.environ["PASSWORD"]
+        self.wait_midnight = os.environ["WAIT_TILL_MIDNIGHT"]
 
     def start(self):
         self.driver.get(self.start_url)
@@ -62,10 +63,11 @@ class BookingBase:
         ).click()
 
     def select_facilities(self):
-        current_time = time.localtime()
-        time_until_midnight = (24 - current_time.tm_hour) * 3600 - current_time.tm_min * 60 - current_time.tm_sec
-        # Wait until midnight
-        time.sleep(time_until_midnight)
+        if self.wait_midnight is True:
+            current_time = time.localtime()
+            time_until_midnight = (24 - current_time.tm_hour) * 3600 - current_time.tm_min * 60 - current_time.tm_sec
+            # Wait until midnight
+            time.sleep(time_until_midnight)
         xpath_badminton_facility = "//input[@type='radio' and @name='p_info' and @value='1BB26']"
         self.wait.until(
             EC.element_to_be_clickable(
@@ -75,7 +77,8 @@ class BookingBase:
 
     def select_date(self):
         xpath_badminton_date = \
-            f"//input[@type='radio' and @name='p_rec' and @value='1BB2BB{self.court}{self.date}{self.timing_index}']"
+            f"//input[@type='radio' and @name='p_rec' and @value='1BB2BB{self.court}{self.date}{self.timing_index+1}']"
+        print(xpath_badminton_date)
         self.wait.until(
             EC.element_to_be_clickable(
                 (By.XPATH, xpath_badminton_date)
