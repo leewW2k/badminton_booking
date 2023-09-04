@@ -74,6 +74,12 @@ class BookingBase:
                 (By.XPATH, xpath_badminton_facility)
             )
         ).click()
+        try:
+            radio_button = self.driver.find_element(By.XPATH, xpath_badminton_facility)
+            while radio_button:
+                radio_button.click()
+        except:
+            pass
 
     def select_date(self):
         xpath_badminton_date = \
