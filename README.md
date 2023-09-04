@@ -20,4 +20,4 @@ Enter the Date (Format: dd-Mmm-yyyy)
 
 Enter the Time (Start time, 24hrs format: 0800 - 2100)
 
-Run ```python main.py``` afterwards and watch it run
+Run ```python main.py``` afterward and watch it run
