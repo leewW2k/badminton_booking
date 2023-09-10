@@ -97,10 +97,29 @@ class BookingBase:
             )
         ).click()
 
+    def find_available_court(self, index=0):
+        courts = ['01', '02', '03', '04', '05', '06']
+        xpath_badminton_radio_button = []
+        for court in courts:
+            xpath_badminton_radio_button.append(
+                f"//input[@type='radio' and @name='p_rec' and @value='1BB2BB{court}{self.date}{self.timing_index + 1}']"
+            )
+        while True:
+            try:
+                self.driver.find_element(By.XPATH, xpath_badminton_radio_button[index]).click()
+                return
+            except:
+                index += 1
+                if index > 5:
+                    index = 0
+
     def execute(self):
         self.start()
         self.sign_in_ntu()
         self.select_facilities()
-        self.select_date()
+        if self.court == "0":
+            self.find_available_court()
+        else:
+            self.select_date()
         self.select_confirm()
         self.driver.quit()
