@@ -14,7 +14,6 @@ load_dotenv()
 class BookingBase:
     def __init__(self):
         chrome_options = Options()
-        chrome_options.add_experimental_option("mobileEmulation", {"deviceName": "Pixel 3"})
         driver = webdriver.Chrome(options=chrome_options)
         self.driver = driver
         self.wait = WebDriverWait(self.driver, 1000)
