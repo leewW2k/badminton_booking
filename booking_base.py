@@ -1,4 +1,5 @@
 import os
+import random
 import time
 
 from selenium import webdriver
@@ -99,6 +100,7 @@ class BookingBase:
 
     def find_available_court(self, index=0):
         courts = ['01', '02', '03', '04', '05', '06']
+        index = random.randint(0, 5)
         xpath_badminton_radio_button = []
         for court in courts:
             xpath_badminton_radio_button.append(
