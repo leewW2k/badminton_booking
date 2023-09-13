@@ -25,3 +25,7 @@ Run ```python main.py``` afterward and watch it run
 ## Note
 
 Existence of a forever loop if no courts are available for that date & timing
+
+## Screenshot
+
+If booking is done, screenshot will be saved in the root
