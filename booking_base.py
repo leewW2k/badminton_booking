@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from Screenshot import Screenshot
 
 load_dotenv()
 
@@ -16,6 +17,7 @@ class BookingBase:
     def __init__(self):
         chrome_options = Options()
         driver = webdriver.Chrome(options=chrome_options)
+        self.ob = Screenshot.Screenshot()
         self.driver = driver
         self.wait = WebDriverWait(self.driver, 1000)
 
@@ -23,8 +25,8 @@ class BookingBase:
         self.court = os.environ["COURT"]
         self.court = "0" + str(self.court)
         self.date = os.environ["DATE"]
-        timing = os.environ["TIMING"]
-        index = int(timing)
+        self.timing = os.environ["TIMING"]
+        index = int(self.timing)
         index /= 100
         index -= 8
         self.timing_index = int(index)
@@ -98,14 +100,17 @@ class BookingBase:
             )
         ).click()
 
-    def find_available_court(self, index=0):
+    def list_all_courts(self):
         courts = ['01', '02', '03', '04', '05', '06']
-        index = random.randint(0, 5)
         xpath_badminton_radio_button = []
         for court in courts:
             xpath_badminton_radio_button.append(
                 f"//input[@type='radio' and @name='p_rec' and @value='1BB2BB{court}{self.date}{self.timing_index + 1}']"
             )
+        return xpath_badminton_radio_button
+
+    def find_available_court(self, xpath_badminton_radio_button):
+        index = random.randint(0, 5)
         while True:
             try:
                 self.driver.find_element(By.XPATH, xpath_badminton_radio_button[index]).click()
@@ -115,13 +120,24 @@ class BookingBase:
                 if index > 5:
                     index = 0
 
+    def save_screenshot(self):
+        self.ob.full_screenshot(
+            self.driver,
+            save_path=r'.',
+            image_name=f'{self.date}_{self.timing}_{self.username}.png',
+            is_load_at_runtime=True,
+            load_wait_time=3
+        )
+
     def execute(self):
         self.start()
         self.sign_in_ntu()
+        courts_available = self.list_all_courts()
         self.select_facilities()
         if self.court == "0":
-            self.find_available_court()
+            self.find_available_court(courts_available)
         else:
             self.select_date()
         self.select_confirm()
+        self.save_screenshot()
         self.driver.quit()
