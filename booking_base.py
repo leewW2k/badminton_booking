@@ -31,7 +31,7 @@ class BookingBase:
         index -= 8
         self.timing_index = int(index)
 
-        self.username = os.environ["USERNAMENTU"]
+        self.username = os.environ["USERNAMENTU"] + "@student.main.ntu.edu.sg"
         self.password = os.environ["PASSWORD"]
         self.wait_midnight = os.environ["WAIT_TILL_MIDNIGHT"]
 
