@@ -129,9 +129,18 @@ class BookingBase:
             load_wait_time=3
         )
 
+    def click_apply(self):
+        xpath_confirm_court = "//a[@id='sd3']"
+        self.wait.until(
+            EC.element_to_be_clickable(
+                (By.XPATH, xpath_confirm_court)
+            )
+        ).click()
+
     def execute(self):
         self.start()
         self.sign_in_ntu()
+        self.click_apply()
         courts_available = self.list_all_courts()
         self.select_facilities()
         if self.court == "0":
